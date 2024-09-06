@@ -1,0 +1,88 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+.App {
+  font-size: 1.5em;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  width: 850px;
+  padding: auto;
+  margin: auto;
+}
+
+.Form {
+  text-align: justify;
+  margin-left: 1em;
+  padding: 25px;
+  border: 1px solid blue;
+}
+
+.Items p {
+  font-size: 1.0em;
+}
+.Items ul {
+  font-size: 0.95em;
+  list-style-type: none; /* Remove default list styles */
+  padding: 0; /* Remove default padding */
+  margin: 0; /* Remove default margin */
+}
+
+/* Style for list items */
+.Items li {
+  padding: -15px; /* Add padding to each list item */
+  border-bottom: 1px solid #ccc; /* Add a border bottom to separate list items */
+}
+
+.Items li:last-child {
+  border-bottom: none; /* Remove border bottom for the last list item */
+}
+
+/* Hover effect for list items */
+.Items li:hover {
+  background-color: #f0f0f0; /* Change background color on hover */
+}
+
+button {
+  font-size: 1em;
+  margin: 1em;
+}
+
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
