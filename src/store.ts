@@ -1,11 +1,13 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import itemsReducer from './reducers/itemsSlice';
 import postsReducer from './reducers/postsSlice';
+import cafesReducer from './reducers/cafesSlice';
 
-const rootReducer = {
+const rootReducer = combineReducers({
+  cafes: cafesReducer,
   items: itemsReducer,
   posts: postsReducer
-}
+})
 
 const store = configureStore({
   reducer: rootReducer,
