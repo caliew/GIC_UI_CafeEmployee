@@ -64,7 +64,6 @@ export const updateCafe = createAsyncThunk('cafes/updateCafe', async (cafe: Cafe
 // Async thunk for deleting a cafe
 export const deleteCafe = createAsyncThunk('cafes/deleteCafe', async (id: number) => {
   try {
-    console.log(`..http://localhost:3000/cafes/${id}..`);
     const response = await fetch(`http://localhost:3000/cafes/${id}`, {
       method: 'DELETE',
     });

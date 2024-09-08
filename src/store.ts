@@ -2,10 +2,11 @@ import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import itemsReducer from './reducers/itemsSlice';
 import postsReducer from './reducers/postsSlice';
 import cafesReducer from './reducers/cafesSlice';
+import employeesReducer from './reducers/employeesSlice';
 
 const rootReducer = combineReducers({
   cafes: cafesReducer,
-  items: itemsReducer,
+  employees: employeesReducer,
   posts: postsReducer
 })
 

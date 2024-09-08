@@ -58,6 +58,18 @@
   background-color: #f0f0f0; /* Change background color on hover */
 }
 
+.input-field {
+  display: flex;
+  font-size: 1.25rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+}
+
+.error-message {
+  font-size: 1.25rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: red;
+}
+
 button {
   font-size: 1em;
   margin: 1em;
