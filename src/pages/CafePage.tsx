@@ -14,33 +14,38 @@ const CafePage = () => {
   const [cafesFetched, setCafesFetched] = useState(false);
 
   useEffect(() => {
-    if (!cafesFetched) {
-      dispatch(fetchCafes());
-      setCafesFetched(true);
-    }
-  }, [cafesFetched, dispatch]);
+    dispatch(fetchCafes());
+  }, [dispatch]);
 
   useEffect(() => {
-    console.log(cafes);
     if (cafes.cafes.length > 0) {
       setCafesFetched(true);
     }
   }, [cafes]);
 
-  const handleSubmit = (values, { setSubmitting }) => {
+  useEffect(() => {
+    const filteredCafes = cafes.cafes.filter((cafe) => cafe.location.includes(filterLocation));
+    // Update the state with the filtered cafes
+    // This will cause the component to re-render with the updated list
+  }, [cafes, filterLocation]);
+
+  const handleSubmit = (values, { setSubmitting, resetForm }) => {
     if (editingCafe) {
-      console.log(editingCafe, values);
+      console.log(`..handleSubmit..EDIT..`,values)
       dispatch(updateCafe({ ...editingCafe, ...values }));
       setEditingCafe(null);
     } else {
+      console.log(`..handleSubmit..NEW..`,values)
       dispatch(createCafe(values));
+      // resetForm();
     }
     dispatch(fetchCafes());
-    setSubmitting(false);
   };
 
   const handleDelete = (id) => {
+    console.log(`..HANDLE DELETE...${id}`);
     dispatch(deleteCafe(id));
+    dispatch(fetchCafes()); 
   };
 
   const handleEdit = (cafe) => {
@@ -60,12 +65,6 @@ const CafePage = () => {
       <Typography variant="h4" component="h1" sx={{ marginBottom: 2 }}>
         Cafe Page
       </Typography>
-      <Button variant="contained" color="primary" sx={{ marginBottom: 2 }}>
-        Order Coffee
-      </Button>
-      <Button variant="contained" color="secondary" sx={{ marginBottom: 2 }}>
-        View Menu
-      </Button>
       <RouterLink to="/" style={{ textDecoration: 'none', color: 'blue' }}>
         <Typography variant="h6" component="h2" sx={{ marginBottom: 2 }}>
           Back to Home Page

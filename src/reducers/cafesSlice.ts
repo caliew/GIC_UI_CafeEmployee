@@ -20,7 +20,6 @@ const initialState: CafesState = {
 // Async thunk for fetching cafes
 export const fetchCafes = createAsyncThunk('cafes/fetchCafes', async () => {
   try {
-    console.log('..DISPATCH FETCHCAFES..cafes/fetchCafes');
     const response = await fetch('http://localhost:3000/cafes');
     const data = await response.json();
     return data;
@@ -39,7 +38,7 @@ export const createCafe = createAsyncThunk('cafes/createCafe', async (cafe: Cafe
       body: JSON.stringify(cafe),
     });
     const data = await response.json();
-    return data;
+    return { ...cafe, ...data }; // Return the updated cafe data
   } catch (error) {
     console.error('Error creating cafe:', error);
     throw error;
@@ -55,7 +54,7 @@ export const updateCafe = createAsyncThunk('cafes/updateCafe', async (cafe: Cafe
       body: JSON.stringify(cafe),
     });
     const data = await response.json();
-    return data;
+    return { ...cafe, ...data }; // Return the updated cafe data
   } catch (error) {
     console.error('Error updating cafe:', error);
     throw error;
@@ -69,8 +68,11 @@ export const deleteCafe = createAsyncThunk('cafes/deleteCafe', async (id: number
     const response = await fetch(`http://localhost:3000/cafes/${id}`, {
       method: 'DELETE',
     });
-    const data = await response.json();
-    return data;
+    if (response.ok) {
+      return id; // Return the ID of the deleted cafe
+    } else {
+      throw new Error(`Failed to delete cafe with ID ${id}`);
+    }
   } catch (error) {
     console.error('Error deleting cafe:', error);
     throw error;
@@ -86,11 +88,11 @@ const cafesSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchCafes.fulfilled, (state, action) => {
-        console.log('..FETCH CAFES..FULFILLED...', action.payload);
         state.cafes = action.payload;
       })
       .addCase(createCafe.fulfilled, (state, action) => {
         state.cafes.push(action.payload);
+        console.log(`..createCafe FULLFILLED..`, state.cafes);
       })
       .addCase(updateCafe.fulfilled, (state, action) => {
         const index = state.cafes.findIndex((cafe) => cafe.id === action.payload.id);
@@ -99,11 +101,11 @@ const cafesSlice = createSlice({
         }
       })
       .addCase(deleteCafe.fulfilled, (state, action) => {
-        const index = state.cafes.findIndex((cafe) => cafe.id === action.payload.id);
+        const index = state.cafes.findIndex((cafe) => cafe.id === action.payload);
         if (index !== -1) {
           state.cafes.splice(index, 1);
         }
-      });
+      })
   },
 });
 
