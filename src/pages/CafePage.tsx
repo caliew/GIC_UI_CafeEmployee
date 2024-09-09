@@ -4,6 +4,8 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 
 import { Link as RouterLink } from 'react-router-dom';
 import { fetchCafes, createCafe, updateCafe, deleteCafe } from '../reducers/cafesSlice';
+import { fetchEmployeesOnCafeID } from '../reducers/employeesSlice';
+
 import { useSelector, useDispatch } from 'react-redux';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
@@ -14,9 +16,11 @@ const CafePage = () => {
 
   const dispatch = useDispatch();
   const cafes = useSelector((state) => state.cafes);
+  const employees = useSelector((state) => state.employees);
   const [editingCafe, setEditingCafe] = useState(null);
   const [filterLocation, setFilterLocation] = useState('');
   const [rowData, setRowData] = useState([]);
+  const [cafeEmployees, setCafeEmployees] = useState([]);
 
   useEffect(() => {
     dispatch(fetchCafes());
@@ -30,6 +34,13 @@ const CafePage = () => {
       setRowData(data);
     }
   }, [cafes, filterLocation]);
+
+  useEffect(() => {
+    console.log(employees)
+    if (employees && employees.employeesOnCafeID) {
+      setCafeEmployees(employees.employeesOnCafeID);
+    }
+  }, [employees]);
 
   const handleSubmit = (values, { setSubmitting, resetForm }) => {
     if (editingCafe) {
@@ -58,6 +69,11 @@ const CafePage = () => {
 
   const handleFilter = (event) => {
     setFilterLocation(event.target.value);
+  };
+
+  const handleFetchEmployeesOnCafeID = (cafeID) => {
+    console.log(cafeID)
+    dispatch(fetchEmployeesOnCafeID(cafeID));
   };
 
   return (
@@ -111,6 +127,9 @@ const CafePage = () => {
                   <Button variant="contained" color="secondary" onClick={() => handleDelete(row.id)}>
                     Delete
                   </Button>
+                  <Button variant="contained" color="secondary" onClick={() => handleFetchEmployeesOnCafeID(row.id)}>
+                    Fetch Employees
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
@@ -118,6 +137,36 @@ const CafePage = () => {
         </Table>
       </TableContainer>
 
+
+      {cafeEmployees.length > 0 && (
+        <Box sx={{ padding: 4, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <Typography variant="h4" component="h1" sx={{ marginBottom: 2 }}>
+            Employees on Cafe
+          </Typography>
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Email Address</TableCell>
+                  <TableCell>Phone Number</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {cafeEmployees.map((employee) => (
+                  <TableRow key={employee.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableCell component="th" scope="row">
+                      {employee.name}
+                    </TableCell>
+                    <TableCell>{employee.email_address}</TableCell>
+                    <TableCell>{employee.phone_number}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
+      )}
       <hr/>
 
       <Formik

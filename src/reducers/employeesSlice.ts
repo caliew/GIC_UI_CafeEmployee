@@ -1,6 +1,5 @@
 // employeesSlice.ts
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { UNSAFE_ErrorResponseImpl } from 'react-router-dom';
 
 interface Employee {
   id: number;
@@ -14,10 +13,12 @@ interface Employee {
 
 interface EmployeesState {
   employees: Employee[];
+  employeesOnCafeID: Employee[];
 }
 
 const initialState: EmployeesState = {
   employees: [],
+  employeesOnCafeID: []
 };
 
 // Async thunk for fetching Employee
@@ -28,6 +29,18 @@ export const fetchEmployees = createAsyncThunk('employees/fetchEmployees', async
     return data;
   } catch (error) {
     console.error('Error fetching employees:', error);
+    throw error;
+  }
+});
+
+// Async thunk for fetching employees by cafe ID
+export const fetchEmployeesOnCafeID = createAsyncThunk('employees/fetchEmployeesOnCafeID', async (cafeID: number) => {
+  try {
+    const response = await fetch(`http://localhost:3000/employees?cafe=${cafeID}`);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching employees on cafe ID:', error);
     throw error;
   }
 });
@@ -94,6 +107,10 @@ const employeesSlice = createSlice({
     builder
       .addCase(fetchEmployees.fulfilled, (state, action) => {
         state.employees = action.payload;
+      })
+      .addCase(fetchEmployeesOnCafeID.fulfilled, (state, action) => {
+        console.log(action)
+        state.employeesOnCafeID = action.payload;
       })
       .addCase(createEmployee.fulfilled, (state, action) => {
         state.employees.push(action.payload);
